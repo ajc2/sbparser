@@ -1290,12 +1290,9 @@ var CHK_NUMBER_NULL_VAR = createVariableChecker(TYPE_NUMBER | TYPE_NULL);
 var CHK_NONNEGATIVE = createMinChecker(0);
 var CHK_BOOL = createRangeChecker(0,1);
 /*outdated*/var CHK_RESOURCE = createRegexChecker(/^(?:(?:PRG|MEM|COL[0-2][UL]?|GRP[0-3]|SCU[01][UL]?|BGU[0-3][UL]?|BGF0?[UL]?|BGD[01][UL]?|SPU[0-7]|SPD[0-3]|SPS[01][UL]?):)?[A-Z0-9_]{1,8}$/);
-/*outdated*/var CHK_FILE = createRegexChecker(/^(?:(?:PRG|MEM|COL|GRP|SCR|CHR):)?[A-Z0-9_]{1,8}$/);
-/*outdated*/var CHK_COL_BANK = createRegexChecker(/^(?:BG|SP|GRP)$/);
-/*outdated*/var CHK_COLOR = createRangeChecker(0,255);
-/*outdated*/var CHK_PALETTE = createRangeChecker(0,15);
-/*outdated*/var CHK_CHR_NAME = createRegexChecker(/^(?:BGU[0-3][UL]?|BGF0?[UL]?|BGD[01][UL]?|SPU[0-7]|SPD[0-3]|SPS[01][UL]?)$/);
-/*outdated*/var CHK_CHR_NUMBER = createRangeChecker(0,255);
+/*outdated*/var CHK_FILE = createRegexChecker(/^(?:(?:PRG|MEM|COL|GRP|SCR|CHR):)?[A-Z0-9_]{1,10}$/);
+/*maybe works*/var CHK_COLOR = createRegexChecker(/^RGB\((?:(?:[0-255])?[0-255],[0-255],[0-255])\)$/);
+var CHK_CHR_NUMBER = createRangeChecker(0,4095);
 /*investigate*/var CHK_SP_NUMBER = createRangeChecker(0,511);
 /*will fix*/var CHK_CONSOLE_WIDTH = createRangeChecker(0,31,true);
 /*will fix*/var CHK_CONSOLE_HEIGHT = createRangeChecker(0,23,true);
@@ -1377,8 +1374,6 @@ var expectedCommand = {
 	DELETE: { exprs: { arity: [1], types: [CHK_FILE] } },
 	EXEC: { exprs: { arity: [1], types: [createRegexChecker(/^(?:PRG:)?[A-Z0-9_]{1,8}$/)] } },
 	RENAME: { exprs: { arity: [2], types: [CHK_FILE, createRegexChecker(/^[A-Z0-9_]{1,8}$/)] } },
-	RECVFILE: { exprs: { arity: [1], types: [CHK_FILE] } },
-	SENDFILE: { exprs: { arity: [1], types: [CHK_FILE] } },
 	VISIBLE: { exprs: { arity: [6], types: [createRangeChecker(0,1,false,TYPE_NULL),
 											createRangeChecker(0,1,false,TYPE_NULL),
 											createRangeChecker(0,1,false,TYPE_NULL),
@@ -1395,7 +1390,7 @@ var expectedCommand = {
 	SPPAGE: { exprs: { arity: [1], types: [createRangeChecker(0,1)] } },
 	SPSET: { exprs: { arity: [6,8], types: [CHK_SP_NUMBER, createRangeChecker(0,511), CHK_PALETTE, CHK_BOOL, CHK_BOOL, createRangeChecker(0,3), createSelectChecker([8,16,32,64]), createSelectChecker([8,16,32,64])] } },
 	SPCLR: { exprs: { arity: [0,1], types: [CHK_SP_NUMBER] } },
-	SPCHR: { exprs: { arity: [2,6], types: [CHK_SP_NUMBER, createRangeChecker(0,511), CHK_PALETTE, CHK_BOOL, CHK_BOOL, createRangeChecker(0,3)] } },
+	/*What to do about binary attributes?*/SPCHR: { exprs: { arity: [2,6], types: [CHK_SP_NUMBER, createRangeChecker(0,511), createRangeChecker(0,511), createRangeChecker(0,511), createRangeChecker(0-511), ] } },
 	SPANIM: { exprs: { arity: [3,4], types: [CHK_SP_NUMBER, createMinChecker(1), CHK_NONNEGATIVE, CHK_NONNEGATIVE] } },
 	SPOFS: { exprs: { arity: [3,4], types: [CHK_SP_NUMBER, CHK_NUMBER, CHK_NUMBER, CHK_NONNEGATIVE] } },
 	SPANGLE: { exprs: { arity: [2,3,4], types: [createRangeChecker(0,31), CHK_NUMBER, CHK_NONNEGATIVE, createSelectChecker([-1,1])] } },
@@ -1403,11 +1398,11 @@ var expectedCommand = {
 		expr = findAssignedValue(expr);
 		if (expr.type == 'number') {
 			if (expr.val < 0) {
-				msgs.push(new err(expr.pos, 'Number is too small. (0-200)'));
+				msgs.push(new err(expr.pos, 'Number is too small. (0-2.0)'));
 				return false;
 			}
-			else if (expr.val > 200) {
-				msgs.push(new err(expr.pos, 'Number is too large. (0-200)'));
+			else if (expr.val > 2) {
+				msgs.push(new err(expr.pos, 'Number is too large. (0-2.0)'));
 				return false;
 			}
 		}
