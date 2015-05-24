@@ -1276,7 +1276,8 @@ function createRegexChecker(regex, type) {
 		return true;
 	});
 }
- 
+
+//start of section
 var CHK_NUMBER = new TypeChecker(TYPE_NUMBER);
 var CHK_STRING = new TypeChecker(TYPE_STRING);
 var CHK_ANY = new TypeChecker(TYPE_ANY);
@@ -1288,23 +1289,23 @@ var CHK_ANY_VAR = createVariableChecker(TYPE_ANY);
 var CHK_NUMBER_NULL_VAR = createVariableChecker(TYPE_NUMBER | TYPE_NULL);
 var CHK_NONNEGATIVE = createMinChecker(0);
 var CHK_BOOL = createRangeChecker(0,1);
-var CHK_RESOURCE = createRegexChecker(/^(?:(?:PRG|MEM|COL[0-2][UL]?|GRP[0-3]|SCU[01][UL]?|BGU[0-3][UL]?|BGF0?[UL]?|BGD[01][UL]?|SPU[0-7]|SPD[0-3]|SPS[01][UL]?):)?[A-Z0-9_]{1,8}$/);
-var CHK_FILE = createRegexChecker(/^(?:(?:PRG|MEM|COL|GRP|SCR|CHR):)?[A-Z0-9_]{1,8}$/);
-var CHK_COL_BANK = createRegexChecker(/^(?:BG|SP|GRP)$/);
-var CHK_COLOR = createRangeChecker(0,255);
-var CHK_PALETTE = createRangeChecker(0,15);
-var CHK_CHR_NAME = createRegexChecker(/^(?:BGU[0-3][UL]?|BGF0?[UL]?|BGD[01][UL]?|SPU[0-7]|SPD[0-3]|SPS[01][UL]?)$/);
-var CHK_CHR_NUMBER = createRangeChecker(0,255);
-var CHK_SP_NUMBER = createRangeChecker(0,499);
-var CHK_CONSOLE_WIDTH = createRangeChecker(0,31,true);
-var CHK_CONSOLE_HEIGHT = createRangeChecker(0,23,true);
-var CHK_CONSOLE_COLOR = createRangeChecker(0,15);
-var CHK_GRP_WIDTH = createRangeChecker(0,255,true);
-var CHK_GRP_HEIGHT = createRangeChecker(0,191,true);
-var CHK_GRP_PAGE = createRangeChecker(0,3);
-var CHK_BG_LAYER = createRangeChecker(0,1);
+/*outdated*/var CHK_RESOURCE = createRegexChecker(/^(?:(?:PRG|MEM|COL[0-2][UL]?|GRP[0-3]|SCU[01][UL]?|BGU[0-3][UL]?|BGF0?[UL]?|BGD[01][UL]?|SPU[0-7]|SPD[0-3]|SPS[01][UL]?):)?[A-Z0-9_]{1,8}$/);
+/*outdated*/var CHK_FILE = createRegexChecker(/^(?:(?:PRG|MEM|COL|GRP|SCR|CHR):)?[A-Z0-9_]{1,8}$/);
+/*outdated*/var CHK_COL_BANK = createRegexChecker(/^(?:BG|SP|GRP)$/);
+/*outdated*/var CHK_COLOR = createRangeChecker(0,255);
+/*outdated*/var CHK_PALETTE = createRangeChecker(0,15);
+/*outdated*/var CHK_CHR_NAME = createRegexChecker(/^(?:BGU[0-3][UL]?|BGF0?[UL]?|BGD[01][UL]?|SPU[0-7]|SPD[0-3]|SPS[01][UL]?)$/);
+/*outdated*/var CHK_CHR_NUMBER = createRangeChecker(0,255);
+/*investigate*/var CHK_SP_NUMBER = createRangeChecker(0,499);
+/*will fix*/var CHK_CONSOLE_WIDTH = createRangeChecker(0,31,true);
+/*will fix*/var CHK_CONSOLE_HEIGHT = createRangeChecker(0,23,true);
+/*investigate*/var CHK_CONSOLE_COLOR = createRangeChecker(0,15);
+var CHK_GRP_WIDTH = createRangeChecker(0,511,true);
+var CHK_GRP_HEIGHT = createRangeChecker(0,511,true);
+var CHK_GRP_PAGE = createRangeChecker(0,5);
+var CHK_BG_LAYER = createRangeChecker(0,3);
 var CHK_BGM_TRACK = createRangeChecker(0,7);
-var CHK_BGM_NUMBER = new TypeChecker(TYPE_NUMBER, function(expr, msgs) {
+/*investigate*/var CHK_BGM_NUMBER = new TypeChecker(TYPE_NUMBER, function(expr, msgs) {
 	expr = findAssignedValue(expr);
 	if (expr.type == 'number') {
 		if (29 < expr.val && expr.val < 128 || expr.val >= 257)
@@ -1318,6 +1319,7 @@ var CHK_SORT_ARY = new TypeChecker(TYPE_ANY, function(expr, msgs) {
 	if (expr.type != 'variable')
 		msgs.push(new SBParser.Error(expr.pos, 'Array name required.'));
 });
+//end of section
  
 // List of instructions with arguments by number and type (exprs: expression, vars: variable)
 // Argument number is any one of the values in the case of an array, in the case of a number, requires more arguments
