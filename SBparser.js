@@ -1357,7 +1357,7 @@ var expectedCommand = {
 	ONGOTO: { exprs: { arity: 2, types: [CHK_NUMBER, CHK_LABEL_NULL] } },
 	ONGOSUB: { exprs: { arity: 2, types: [CHK_NUMBER, CHK_LABEL_NULL] } },
 	TMREAD: { exprs: { arity: [1], types: [createRegexChecker(/^\d{2}:\d{2}:\d{2}$/)] }, vars: { arity: [3], types: [CHK_NUMBER_VAR, CHK_NUMBER_VAR, CHK_NUMBER_VAR] } },
-	DTREAD: { exprs: { arity: [1], types: [createRegexChecker(/^\d{4}\/\d{2}\/\d{2}$/)] }, vars: { arity: [3], types: [CHK_NUMBER_VAR, CHK_NUMBER_VAR, CHK_NUMBER_VAR] } },
+	DTREAD: { exprs: { arity: [1], types: [createRegexChecker(/^\d{4}\/\d{2}\/\d{2}$/)] }, vars: { arity: [3,5], types: [CHK_NUMBER_VAR, CHK_NUMBER_VAR, CHK_NUMBER_VAR, CHK_NUMBER_VAR] } },
 	VSYNC: { exprs: { arity: [1], types: [CHK_NONNEGATIVE] } },
 	WAIT: { exprs: { arity: [1], types: [CHK_NONNEGATIVE] } },
 	SORT: { exprs: { arity: [3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35], types: [CHK_NONNEGATIVE, CHK_NUMBER, CHK_SORT_ARY] } },
@@ -1380,20 +1380,16 @@ var expectedCommand = {
 											createRangeChecker(0,1,false,TYPE_NULL),
 											createRangeChecker(0,1,false,TYPE_NULL),
 											createRangeChecker(0,1)] } },
-	/*COLINIT: { exprs: { arity: [0,1,2], types: [CHK_COL_BANK, CHK_COLOR] } },*/
-	/*COLSET: { exprs: { arity: [3], types: [CHK_COL_BANK, CHK_COLOR, createRegexChecker(/^[0-9A-F]{6}$/i)] } },*/
-	/*COLREAD: { exprs: { arity: [2], types: [CHK_COL_BANK, CHK_COLOR] }, vars: { arity: [3], types: [CHK_NUMBER_VAR, CHK_NUMBER_VAR, CHK_NUMBER_VAR] } },*/
 	ACLS: { exprs: { arity: [0], types: [] } },
-	/*CHRINIT: { exprs: { arity: [1], types: [CHK_CHR_NAME] } },*/
-	/*CHRSET: { exprs: { arity: [3], types: [CHK_CHR_NAME, CHK_CHR_NUMBER, createRegexChecker(/^[0-9A-F]{64}$/i)] } },*/
-	/*CHRREAD: { exprs: { arity: [2], types: [CHK_CHR_NAME, CHK_CHR_NUMBER] }, vars: { arity: [1], types: [CHK_STRING_VAR] } },*/
 	SPPAGE: { exprs: { arity: [1], types: [createRangeChecker(0,1)] } },
 	/*SPSET: { exprs: { arity: [6,8], types: [CHK_SP_NUMBER, createRangeChecker(0,511), CHK_PALETTE, CHK_BOOL, CHK_BOOL, createRangeChecker(0,3), createSelectChecker([8,16,32,64]), createSelectChecker([8,16,32,64])] } },*/
 	SPCLR: { exprs: { arity: [0,1], types: [CHK_SP_NUMBER] } },
+	SPSHOW: { exprs: { arity: [1], types: [CHK_SP_NUMBER] } },
+	SPHIDE: { exprs: { arity: [1], types: [CHK_SP_NUMBER] } },
 	/*What to do about binary attributes?*/SPCHR: { exprs: { arity: [2,6], types: [CHK_SP_NUMBER, createRangeChecker(0,511), createRangeChecker(0,511), createRangeChecker(0,511), createRangeChecker(0-511), ] } },
 	SPANIM: { exprs: { arity: [3,4], types: [CHK_SP_NUMBER, createMinChecker(1), CHK_NONNEGATIVE, CHK_NONNEGATIVE] } },
 	SPOFS: { exprs: { arity: [3,4], types: [CHK_SP_NUMBER, CHK_NUMBER, CHK_NUMBER, CHK_NONNEGATIVE] } },
-	SPANGLE: { exprs: { arity: [2,3,4], types: [createRangeChecker(0,31), CHK_NUMBER, CHK_NONNEGATIVE, createSelectChecker([-1,1])] } },
+	/*Needs OUT*/SPROT: { exprs: { arity: [1,2], types: [CHK_SP_NUMBER, CHK_NUMBER] } },
 	SPSCALE: { exprs: { arity: [2,3], types: [createRangeChecker(0,31), new TypeChecker(TYPE_NUMBER, function(expr, msgs) {
 		expr = findAssignedValue(expr);
 		if (expr.type == 'number') {
