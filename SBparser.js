@@ -1289,14 +1289,13 @@ var CHK_ANY_VAR = createVariableChecker(TYPE_ANY);
 var CHK_NUMBER_NULL_VAR = createVariableChecker(TYPE_NUMBER | TYPE_NULL);
 var CHK_NONNEGATIVE = createMinChecker(0);
 var CHK_BOOL = createRangeChecker(0,1);
-var CHK_RESOURCE = createRegexChecker(/^(?:(?:PRG[0-3]?|GRP[0-5]):)?[A-Z0-9_]{1,14}$/);
-var CHK_FILE = createRegexChecker(/^(?:(?:TXT|DAT):)?[A-Z0-9_]{1,14}$/);
+/*outdated*/var CHK_RESOURCE = createRegexChecker(/^(?:(?:PRG|MEM|COL[0-2][UL]?|GRP[0-3]|SCU[01][UL]?|BGU[0-3][UL]?|BGF0?[UL]?|BGD[01][UL]?|SPU[0-7]|SPD[0-3]|SPS[01][UL]?):)?[A-Z0-9_]{1,8}$/);
+/*outdated*/var CHK_FILE = createRegexChecker(/^(?:(?:PRG|MEM|COL|GRP|SCR|CHR):)?[A-Z0-9_]{1,10}$/);
 /*maybe works*/var CHK_COLOR = createRegexChecker(/^RGB\((?:(?:[0-255])?[0-255],[0-255],[0-255])\)$/);
 var CHK_CHR_NUMBER = createRangeChecker(0,4095);
 /*investigate*/var CHK_SP_NUMBER = createRangeChecker(0,511);
-/*maybe fixed?*/var CHK_CONSOLE_WIDTH = createRangeChecker(0,50,true);
-/*will fix*/var CHK_CONSOLE_HEIGHT = createRangeChecker(0,30,true);
-var CHK_CONSOLE_Z = createRangeChecker(-256,1024)
+/*will fix*/var CHK_CONSOLE_WIDTH = createRangeChecker(0,31,true);
+/*will fix*/var CHK_CONSOLE_HEIGHT = createRangeChecker(0,23,true);
 /*investigate*/var CHK_CONSOLE_COLOR = createRangeChecker(0,15);
 var CHK_GRP_WIDTH = createRangeChecker(0,511,true);
 var CHK_GRP_HEIGHT = createRangeChecker(0,511,true);
@@ -1381,15 +1380,15 @@ var expectedCommand = {
 											createRangeChecker(0,1,false,TYPE_NULL),
 											createRangeChecker(0,1,false,TYPE_NULL),
 											createRangeChecker(0,1)] } },
-	COLINIT: { exprs: { arity: [0,1,2], types: [CHK_COL_BANK, CHK_COLOR] } },
-	COLSET: { exprs: { arity: [3], types: [CHK_COL_BANK, CHK_COLOR, createRegexChecker(/^[0-9A-F]{6}$/i)] } },
-	COLREAD: { exprs: { arity: [2], types: [CHK_COL_BANK, CHK_COLOR] }, vars: { arity: [3], types: [CHK_NUMBER_VAR, CHK_NUMBER_VAR, CHK_NUMBER_VAR] } },
+	/*COLINIT: { exprs: { arity: [0,1,2], types: [CHK_COL_BANK, CHK_COLOR] } },*/
+	/*COLSET: { exprs: { arity: [3], types: [CHK_COL_BANK, CHK_COLOR, createRegexChecker(/^[0-9A-F]{6}$/i)] } },*/
+	/*COLREAD: { exprs: { arity: [2], types: [CHK_COL_BANK, CHK_COLOR] }, vars: { arity: [3], types: [CHK_NUMBER_VAR, CHK_NUMBER_VAR, CHK_NUMBER_VAR] } },*/
 	ACLS: { exprs: { arity: [0], types: [] } },
-	CHRINIT: { exprs: { arity: [1], types: [CHK_CHR_NAME] } },
-	CHRSET: { exprs: { arity: [3], types: [CHK_CHR_NAME, CHK_CHR_NUMBER, createRegexChecker(/^[0-9A-F]{64}$/i)] } },
-	CHRREAD: { exprs: { arity: [2], types: [CHK_CHR_NAME, CHK_CHR_NUMBER] }, vars: { arity: [1], types: [CHK_STRING_VAR] } },
+	/*CHRINIT: { exprs: { arity: [1], types: [CHK_CHR_NAME] } },*/
+	/*CHRSET: { exprs: { arity: [3], types: [CHK_CHR_NAME, CHK_CHR_NUMBER, createRegexChecker(/^[0-9A-F]{64}$/i)] } },*/
+	/*CHRREAD: { exprs: { arity: [2], types: [CHK_CHR_NAME, CHK_CHR_NUMBER] }, vars: { arity: [1], types: [CHK_STRING_VAR] } },*/
 	SPPAGE: { exprs: { arity: [1], types: [createRangeChecker(0,1)] } },
-	SPSET: { exprs: { arity: [6,8], types: [CHK_SP_NUMBER, createRangeChecker(0,511), CHK_PALETTE, CHK_BOOL, CHK_BOOL, createRangeChecker(0,3), createSelectChecker([8,16,32,64]), createSelectChecker([8,16,32,64])] } },
+	/*SPSET: { exprs: { arity: [6,8], types: [CHK_SP_NUMBER, createRangeChecker(0,511), CHK_PALETTE, CHK_BOOL, CHK_BOOL, createRangeChecker(0,3), createSelectChecker([8,16,32,64]), createSelectChecker([8,16,32,64])] } },*/
 	SPCLR: { exprs: { arity: [0,1], types: [CHK_SP_NUMBER] } },
 	/*What to do about binary attributes?*/SPCHR: { exprs: { arity: [2,6], types: [CHK_SP_NUMBER, createRangeChecker(0,511), createRangeChecker(0,511), createRangeChecker(0,511), createRangeChecker(0-511), ] } },
 	SPANIM: { exprs: { arity: [3,4], types: [CHK_SP_NUMBER, createMinChecker(1), CHK_NONNEGATIVE, CHK_NONNEGATIVE] } },
@@ -1419,8 +1418,8 @@ var expectedCommand = {
 	BGOFS: { exprs: { arity: [3,4], types: [CHK_BG_LAYER, CHK_NUMBER, CHK_NUMBER, CHK_NONNEGATIVE] } },
 	BGCLR: { exprs: { arity: [0,1], types: [CHK_BG_LAYER] } },
 	BGCOPY: { exprs: { arity: [7], types: [CHK_BG_LAYER, CHK_NUMBER, CHK_NUMBER, CHK_NUMBER, CHK_NUMBER, CHK_NUMBER, CHK_NUMBER] } },
-	BGPUT: { exprs: { multiple: true, arity: [4,7], types: [[CHK_BG_LAYER, CHK_NUMBER, CHK_NUMBER, createRegexChecker(/^[0-9A-F]{4}$/, TYPE_NUMBER)], [CHK_BG_LAYER, CHK_NUMBER, CHK_NUMBER, createRangeChecker(0,1023), CHK_PALETTE, CHK_BOOL, CHK_BOOL]] } },
-	BGFILL: { exprs: { multiple: true, arity: [6,9], types: [[CHK_BG_LAYER, CHK_NUMBER, CHK_NUMBER, CHK_NUMBER, CHK_NUMBER, createRegexChecker(/^(?:[0-9A-F]{4})*$/, TYPE_NUMBER)], [CHK_BG_LAYER, CHK_NUMBER, CHK_NUMBER, CHK_NUMBER, CHK_NUMBER, createRangeChecker(0,1023), CHK_PALETTE, CHK_BOOL, CHK_BOOL]] } },
+	/*BGPUT: { exprs: { multiple: true, arity: [4,7], types: [[CHK_BG_LAYER, CHK_NUMBER, CHK_NUMBER, createRegexChecker(/^[0-9A-F]{4}$/, TYPE_NUMBER)], [CHK_BG_LAYER, CHK_NUMBER, CHK_NUMBER, createRangeChecker(0,1023), CHK_PALETTE, CHK_BOOL, CHK_BOOL]] } },*/
+	/*BGFILL: { exprs: { multiple: true, arity: [6,9], types: [[CHK_BG_LAYER, CHK_NUMBER, CHK_NUMBER, CHK_NUMBER, CHK_NUMBER, createRegexChecker(/^(?:[0-9A-F]{4})*$/, TYPE_NUMBER)], [CHK_BG_LAYER, CHK_NUMBER, CHK_NUMBER, CHK_NUMBER, CHK_NUMBER, createRangeChecker(0,1023), CHK_PALETTE, CHK_BOOL, CHK_BOOL]] } },*/
 	BGREAD: { exprs: { arity: [3], types: [CHK_BG_LAYER, CHK_NUMBER, CHK_NUMBER] }, vars: { multiple: true, arity: [1,4], types: [[CHK_ANY_VAR], [CHK_NUMBER_VAR, CHK_NUMBER_VAR, CHK_NUMBER_VAR, CHK_NUMBER_VAR]] } },
 	GPAGE: { exprs: { arity: [1,3], types: [createRangeChecker(0,1), CHK_GRP_PAGE, CHK_GRP_PAGE] } },
 	GCLS: { exprs: { arity: [0,1], types: [CHK_COLOR] } },
@@ -1431,7 +1430,7 @@ var expectedCommand = {
 	GBOX: { exprs: { arity: [4,5], types: [CHK_NUMBER, CHK_NUMBER, CHK_NUMBER, CHK_NUMBER, CHK_COLOR] } },
 	GFILL: { exprs: { arity: [4,5], types: [CHK_NUMBER, CHK_NUMBER, CHK_NUMBER, CHK_NUMBER, CHK_COLOR] } },
 	GCIRCLE: { exprs: { arity: [3,4,6], types: [CHK_NUMBER, CHK_NUMBER, createMinChecker(1,true), createRangeChecker(0,255,false,TYPE_NULL), CHK_NUMBER, CHK_NUMBER] } },
-	GPUTCHR: { exprs: { arity: [6], types: [CHK_NUMBER, CHK_NUMBER, CHK_CHR_NAME, CHK_CHR_NUMBER, CHK_PALETTE, createSelectChecker([1,2,4,8])] } },
+	/*GPUTCHR: { exprs: { arity: [6], types: [CHK_NUMBER, CHK_NUMBER, CHK_CHR_NAME, CHK_CHR_NUMBER, CHK_PALETTE, createSelectChecker([1,2,4,8])] } },*/
 	GDRAWMD: { exprs: { arity: [1], types: [CHK_BOOL] } },
 	GPRIO: { exprs: { arity: [1], types: [CHK_GRP_PAGE] } },
 	GCOPY: { exprs: { arity: [7,8], types: [CHK_GRP_PAGE, CHK_NUMBER, CHK_NUMBER, CHK_NUMBER, CHK_NUMBER, CHK_NUMBER, CHK_NUMBER, CHK_NUMBER] } },
