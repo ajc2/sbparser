@@ -1709,7 +1709,7 @@ function checkForNext(stmts, msgs) {
 }
  
 function isEndStmt(stmt) {
-	if (/^(?:GOTO|RETURN|END|BREAK|CONTINUE)$/.test(stmt.name))
+	if (/^(?:GOTO|RETURN\S|END|BREAK|CONTINUE)$/.test(stmt.name))
 		return true;
 	// Regards the end of a command when there is a termination to both branches(?)
 	// Check only the last instruction since there is unreachable code
