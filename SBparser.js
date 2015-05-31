@@ -1667,7 +1667,7 @@ function checkDeadCode(stmts, msgs) {
 	for (var i = 1; i < stmts.length; ++i) {
 		// Is not performed immediately after GOTO,RETURN,END,BREAK,CONTINUE
 		if (isEndStmt(stmts[i-1])) {
-			// No need to run DATA if it is a GOTO destination or label/function declaration
+			// No need to announce it if it is DATA, GOTO destination, or label/function declaration
 			if (!/^(?:@|DATA|DEF|COMMONDEF)/.test(stmts[i].name)) {
 				msgs.push(new SBParser.Warning(stmts[i].pos, 'Command ' + stmts[i].name + ' will never be executed.'));
 			}
